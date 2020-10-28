@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Epsic.Rpg.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace Epsic.Rpg.Controllers
 {
@@ -19,9 +16,46 @@ namespace Epsic.Rpg.Controllers
         };
 
         [HttpGet("characters")]
-        public IActionResult Get()
+        public IActionResult GetAll()
         {
-            return Ok(_characters.FirstOrDefault());
+            return Ok(_characters);
+        }
+
+        [HttpGet("characters/{id}")]
+        public IActionResult GetSingle(int id)
+        {
+            return Ok(_characters.FirstOrDefault(c => c.Id == id));
+        }
+
+        [HttpPost("characters/{id}")]
+        public IActionResult Update([FromRoute] int id, [FromBody] CharacterPatchViewModel model)
+        {
+            var character = _characters.FirstOrDefault(c => c.Id == id);
+
+            character.Name = model.Name;
+            character.Class = character.Class;
+
+            return Ok(character);
+        }
+
+        [HttpPost("characters")]
+        public IActionResult AddCharacter(Character newCharacter)
+        {
+            _characters.Add(newCharacter);
+            return Ok(newCharacter);
+        }
+
+        [HttpGet("personnages")]
+        public IActionResult Search(string name)
+        {
+            return Ok(_characters.Where(c => c.Name.Contains(name)).ToList());
+        }
+
+        [HttpDelete("characters/{id}")]
+        public IActionResult Delete(int id)
+        {
+            _characters.Remove(_characters.FirstOrDefault(c => c.Id == id));
+            return Ok();
         }
     }
 }

@@ -1,16 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Swashbuckle.AspNetCore.SwaggerGen.ConventionalRouting;
 
 namespace Epsic.Rpg
 {
@@ -31,8 +23,7 @@ namespace Epsic.Rpg
                 jsonOptions.JsonSerializerOptions.PropertyNamingPolicy = null;
             });
             services.AddSwaggerGen();
-            // this will handle all conventional based routes
-            services.AddSwaggerGenWithConventionalRoutes();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

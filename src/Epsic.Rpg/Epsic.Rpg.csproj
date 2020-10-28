@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen.ConventionalRouting" Version="3.0.1.7" />
   </ItemGroup>
 
 </Project>

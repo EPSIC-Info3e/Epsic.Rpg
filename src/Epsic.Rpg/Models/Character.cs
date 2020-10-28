@@ -12,4 +12,10 @@ namespace Epsic.Rpg.Models
         public int Intelligence { get; set; }
         public RpgClass Class { get; set; }
     }
+
+    public class CharacterPatchViewModel
+    {
+        public string Name { get; set; }
+        public RpgClass Class { get; set; }
+    }
 }
