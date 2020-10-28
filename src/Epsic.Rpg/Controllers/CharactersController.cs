@@ -23,5 +23,23 @@ namespace Epsic.Rpg.Controllers
         {
             return Ok(_characters.FirstOrDefault());
         }
+
+        [HttpGet("characters/getsingle/{id}")]
+        public IActionResult GetSingle(int id)
+        {
+            return Ok(_characters.FirstOrDefault(c => c.Id == id));
+        }
+
+        [HttpGet("characters/getall")]
+        public IActionResult GetAll()
+        {
+            return Ok(_characters);
+        }
+
+        [HttpGet("personnages")]
+        public IActionResult Search(string nom)
+        {
+            return Ok(_characters.Where(c => c.Name.Contains(nom)).ToList());
+        }
     }
 }
