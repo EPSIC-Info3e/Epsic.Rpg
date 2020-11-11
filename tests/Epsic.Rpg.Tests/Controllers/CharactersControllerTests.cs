@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Epsic.Rpg.Enums;
 using Epsic.Rpg.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -45,12 +46,10 @@ namespace Epsic.Rpg.Tests.Controllers
         }
 
         [TestMethod, TestCategory("Ex2")]
-        public async Task CharactersCreate()
+        [DataRow(4, "TestPlayer", 10)]
+        public async Task CharactersCreate(int id, string name, int hitPoints)
         {
             // Arrange
-            var id = 4;
-            var name = "TestPlayer";
-            var hitPoints = 4;
             var character = new Character { Id = id, Name = name, HitPoints = hitPoints };
             
             // Act
@@ -62,12 +61,11 @@ namespace Epsic.Rpg.Tests.Controllers
             Assert.AreEqual(hitPoints, response.HitPoints);
         }
 
-        public async Task CharactersUpdate()
+        [TestMethod, TestCategory("Ex2")]
+        [DataRow(3, "TestPlayer", RpgClass.Cleric)]
+        public async Task CharactersUpdate(int id, string name, RpgClass rpgClass)
         {
             // Arrange
-            var name = "TestPlayer";
-            var id = 3;
-            var rpgClass = Enums.RpgClass.Cleric;
             var character = new CharacterPatchViewModel { Name = name, Class = rpgClass };
 
             // Act
@@ -90,6 +88,38 @@ namespace Epsic.Rpg.Tests.Controllers
 
             // Assert
             Assert.AreEqual(System.Net.HttpStatusCode.OK, response.StatusCode);
+        }
+
+        [TestMethod, TestCategory("Ex3")]
+        [DataRow(6, "TestPlayer", 10)]
+        public async Task IntegrationTestCreate(int id, string name, int hitPoints)
+        {
+            //Arrange
+            await CharactersCreate(id, name, hitPoints);
+
+            // Act
+            var response = await GetAsync<Character>($"/characters/{id}");
+
+            // Assert
+            Assert.AreEqual(id, response.Id);
+            Assert.AreEqual(name, response.Name);
+            Assert.AreEqual(hitPoints, response.HitPoints);
+        }
+
+        [TestMethod, TestCategory("Ex3")]
+        [DataRow(6, "TestPlayer2", RpgClass.Cleric)]
+        public async Task IntegrationTestUpdate(int id, string name, RpgClass rpgClass)
+        {
+            //Arrange
+            await CharactersUpdate(id, name, rpgClass);
+
+            // Act
+            var response = await GetAsync<Character>($"/characters/{id}");
+
+            // Assert
+            Assert.AreEqual(id, response.Id);
+            Assert.AreEqual(name, response.Name);
+            Assert.AreEqual(rpgClass, response.Class);
         }
     }
 }
