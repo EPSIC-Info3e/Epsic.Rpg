@@ -1,3 +1,4 @@
+using Epsic.Rpg.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -23,7 +24,7 @@ namespace Epsic.Rpg
                 jsonOptions.JsonSerializerOptions.PropertyNamingPolicy = null;
             });
             services.AddSwaggerGen();
-
+            services.AddSingleton<ICharacterService, CharacterService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

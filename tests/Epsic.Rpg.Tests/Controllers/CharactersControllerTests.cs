@@ -111,6 +111,7 @@ namespace Epsic.Rpg.Tests.Controllers
         public async Task IntegrationTestUpdate(int id, string name, RpgClass rpgClass)
         {
             //Arrange
+            await CharactersCreate(id, name, 10);
             await CharactersUpdate(id, name, rpgClass);
 
             // Act
