@@ -1,4 +1,4 @@
-namespace Epsic.Info3e.Rpg.Enums
+namespace Epsic.Rpg.Enums
 {
     public enum RpgClass
     {

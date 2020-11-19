@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Epsic.Info3e.Rpg
+namespace Epsic.Rpg
 {
     public class Program
     {
