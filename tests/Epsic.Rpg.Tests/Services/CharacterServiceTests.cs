@@ -12,7 +12,7 @@ namespace Epsic.Rpg.Tests.Services
     public class CharacterServiceTests
     {
         [TestMethod, TestCategory("Ex4")]
-        public async Task GetAllTest()
+        public void GetAllTest()
         {
             //Arrange
             var service = new CharacterService();
