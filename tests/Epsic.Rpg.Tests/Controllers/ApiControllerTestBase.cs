@@ -17,6 +17,11 @@ namespace Epsic.Rpg.Tests.Controllers
             _client = _factory.CreateClient();
         }
 
+        protected async Task<HttpResponseMessage> GetAsync(string url) 
+        {
+            return await _client.GetAsync(url);
+        } 
+
         protected async Task<T> GetAsync<T>(string url) 
         {
             var response = await _client.GetAsync(url);
@@ -26,16 +31,12 @@ namespace Epsic.Rpg.Tests.Controllers
             response.EnsureSuccessStatusCode();
 
             return JsonSerializer.Deserialize<T>(body);
-        } 
+        }
 
-        protected async Task<string> GetAsync(string url) 
+        protected async Task<HttpResponseMessage> PostBasicAsync<T>(string url, T body) 
         {
-            var response = await _client.GetAsync(url);
-
-            response.EnsureSuccessStatusCode();
-
-            return await response.Content.ReadAsStringAsync();
-        } 
+            return await _client.PostAsJsonAsync(url, body);
+        }
 
         protected async Task<T> PostAsync<T>(string url, T body) 
         {
