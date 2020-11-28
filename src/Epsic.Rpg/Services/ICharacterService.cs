@@ -7,6 +7,8 @@ namespace Epsic.Rpg.Services
     {
         Character AddCharacter(Character newCharacter);
         void Delete(int id);
+        bool ExistsById(int id);
+        bool ExistsByName(string name);
         IList<Character> GetAll();
         Character GetSingle(int id);
         IList<Character> Search(string name);

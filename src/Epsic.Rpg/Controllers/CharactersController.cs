@@ -26,32 +26,54 @@ namespace Epsic.Rpg.Controllers
         [HttpGet("characters/{id}")]
         public IActionResult GetSingle(int id)
         {
-            return Ok(_characterService.GetSingle(id));
+            if (id < 1) return BadRequest();
+            var c = _characterService.GetSingle(id);
+            if (c == null) return NotFound();
+            return Ok(c);
         }
 
         [HttpPost("characters/{id}")]
         public IActionResult Update([FromRoute] int id, [FromBody] CharacterPatchViewModel model)
         {
+            if (id < 1) return BadRequest();
+            if (model.Name.Length > 32) return BadRequest();
+            if (_characterService.ExistsByName(model.Name)) return BadRequest();
+            if (!_characterService.ExistsById(id)) return NotFound();
+
             return Ok(_characterService.Update(id, model));
         }
 
         [HttpPost("characters")]
         public IActionResult AddCharacter(Character newCharacter)
         {
-            return Ok(_characterService.AddCharacter(newCharacter));
+            if (newCharacter.Id < 1) return BadRequest();
+            if (newCharacter.Name.Length > 32) return BadRequest();
+            if (_characterService.ExistsByName(newCharacter.Name)) return BadRequest();
+            if (_characterService.ExistsById(newCharacter.Id)) return BadRequest();
+
+            _characterService.AddCharacter(newCharacter);
+
+            return Created($"characters/{newCharacter.Id}", newCharacter);
         }
 
         [HttpGet("personnages")]
         public IActionResult Search(string name)
         {
+            if (name == null) return Unauthorized();
+            if (name.Length < 4) return Unauthorized();
+            if (name == "teapot") return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status418ImATeapot);
             return Ok(_characterService.Search(name));
         }
 
         [HttpDelete("characters/{id}")]
         public IActionResult Delete(int id)
         {
-            _characterService.Delete(id);
-            return Ok();
+            try {
+                _characterService.Delete(id);
+                return NoContent();
+            } catch {
+                return NoContent();
+            }
         }
     }
 }

@@ -50,5 +50,15 @@ namespace Epsic.Rpg.Services
         {
             _characters.Remove(_characters.FirstOrDefault(c => c.Id == id));
         }
+
+        public bool ExistsById(int id)
+        {
+            return _characters.Any(c => c.Id == id);
+        }
+
+        public bool ExistsByName(string name)
+        {
+            return _characters.Any(c => c.Name.Contains(name));
+        }
     }
 }
