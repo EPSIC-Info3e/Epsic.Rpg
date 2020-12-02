@@ -11,17 +11,6 @@ namespace Epsic.Rpg.Tests.Services
     [TestClass]
     public class CharacterServiceTests
     {
-        [TestMethod, TestCategory("Ex4")]
-        public void GetAllTest()
-        {
-            //Arrange
-            var service = new CharacterService();
 
-            // Act
-            var response = service.GetAll();
-
-            // Assert
-            Assert.AreEqual(3, response.Count);
-        }
     }
 }

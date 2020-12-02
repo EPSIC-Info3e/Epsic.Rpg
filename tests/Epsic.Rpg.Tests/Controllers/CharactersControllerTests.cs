@@ -89,39 +89,6 @@ namespace Epsic.Rpg.Tests.Controllers
             Assert.AreEqual(Microsoft.AspNetCore.Http.StatusCodes.Status204NoContent, (int)response.StatusCode);
         }
 
-        [TestMethod, TestCategory("Ex3")]
-        [DataRow(6, "TestPlayer", 10)]
-        public async Task IntegrationTestCreate(int id, string name, int hitPoints)
-        {
-            //Arrange
-            await CharactersCreate(id, name, hitPoints);
-
-            // Act
-            var response = await GetAsync<Character>($"/characters/{id}");
-
-            // Assert
-            Assert.AreEqual(id, response.Id);
-            Assert.AreEqual(name, response.Name);
-            Assert.AreEqual(hitPoints, response.HitPoints);
-        }
-
-        [TestMethod, TestCategory("Ex3")]
-        [DataRow(6, "TestPlayer2", RpgClass.Cleric)]
-        public async Task IntegrationTestUpdate(int id, string name, RpgClass rpgClass)
-        {
-            //Arrange
-            await CharactersCreate(id, "lolilol", 10);
-            await CharactersUpdate(id, name, rpgClass);
-
-            // Act
-            var response = await GetAsync<Character>($"/characters/{id}");
-
-            // Assert
-            Assert.AreEqual(id, response.Id);
-            Assert.AreEqual(name, response.Name);
-            Assert.AreEqual(rpgClass, response.Class);
-        }
-
         [TestMethod, TestCategory("Ex6")]
         [DataRow(-999999)]
         [DataRow(-1)]

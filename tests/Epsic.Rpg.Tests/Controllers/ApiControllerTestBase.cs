@@ -3,17 +3,81 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Net.Http.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.Hosting;
+using System.Linq;
+using Microsoft.Extensions.Logging;
+using System;
+using Microsoft.EntityFrameworkCore;
+using Epsic.Rpg.Data;
+using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;
+using Epsic.Rpg.Models;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Epsic.Rpg.Tests.Controllers
 {
-    public class ApiControllerTestBase : WebApplicationFactory<Startup>
+    public class CustomWebApplicationFactory<TStartup>
+    : WebApplicationFactory<TStartup> where TStartup: class
     {
-        private readonly WebApplicationFactory<Startup> _factory;
-        private readonly HttpClient _client;
-
-        public ApiControllerTestBase()
+        protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            _factory = new WebApplicationFactory<Startup>();
+            builder.ConfigureServices(services =>
+            {
+                var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<EpsicRpgDataContext>));
+                if (descriptor == null) return;
+                services.Remove(descriptor);
+
+                services.AddDbContext<EpsicRpgDataContext>(options =>
+                {
+                    options.UseInMemoryDatabase("Epsic.Rpg");
+                });
+
+                var sp = services.BuildServiceProvider();
+
+                using (var scope = sp.CreateScope())
+                {
+                    var scopedServices = scope.ServiceProvider;
+                    var db = scopedServices.GetRequiredService<EpsicRpgDataContext>();
+                    var logger = scopedServices.GetRequiredService<ILogger<CustomWebApplicationFactory<TStartup>>>();
+
+                    db.Database.EnsureCreated();
+
+                    try
+                    {
+                        ResetInMemoryDatabase(db);
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.LogError(ex, ex.Message);
+                    }
+                }
+            });
+        }
+
+        private static void ResetInMemoryDatabase(EpsicRpgDataContext db)
+        {
+            db.RemoveRange(db.Characters);
+            db.SaveChanges();
+
+            db.AddRange(new List<Character>
+                        {
+                            new Character { Id = 1, Name = "Pierre"},
+                            new Character { Id = 2, Name = "Paul"},
+                            new Character { Id = 3, Name = "Jacques"},
+                        });
+            db.SaveChanges();
+        }
+    }
+
+    public class ApiControllerTestBase : CustomWebApplicationFactory<Startup>
+    {
+        private CustomWebApplicationFactory<Startup> _factory;
+        private HttpClient _client;
+        
+        [TestInitialize]
+        public void SetupTest()
+        {
+            _factory = new CustomWebApplicationFactory<Startup>();
             _client = _factory.CreateClient();
         }
 
@@ -27,8 +91,6 @@ namespace Epsic.Rpg.Tests.Controllers
             var response = await _client.GetAsync(url);
 
             var body = await response.Content.ReadAsStringAsync();
-
-            response.EnsureSuccessStatusCode();
 
             return JsonSerializer.Deserialize<T>(body);
         }
@@ -46,8 +108,6 @@ namespace Epsic.Rpg.Tests.Controllers
         protected async Task<U> PostAsync<T, U>(string url, T body) 
         {
             var response = await _client.PostAsJsonAsync(url, body);
-
-            response.EnsureSuccessStatusCode();
 
             return await response.Content.ReadFromJsonAsync<U>();
         }
