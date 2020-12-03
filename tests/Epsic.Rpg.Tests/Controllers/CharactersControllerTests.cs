@@ -261,7 +261,7 @@ namespace Epsic.Rpg.Tests.Controllers
         [DataRow("a")]
         [DataRow("ab")]
         [DataRow("abc")]
-        public async Task SearchplusPetitQue3(string name)
+        public async Task SearchplusPetitOuEgalQue3(string name)
         {
             // Act
             var response = await GetAsync($"/personnages?name={name}");
