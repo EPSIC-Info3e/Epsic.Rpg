@@ -1,6 +1,8 @@
+using Epsic.Rpg.Data;
 using Epsic.Rpg.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -23,8 +25,11 @@ namespace Epsic.Rpg
             {
                 jsonOptions.JsonSerializerOptions.PropertyNamingPolicy = null;
             });
+            services.AddDbContext<EpsicRpgDataContext>(x => x.UseSqlite(@"Data Source=EpsicRpg.db;"));
+
             services.AddSwaggerGen();
-            services.AddSingleton<ICharacterService, CharacterService>();
+
+            services.AddTransient<ICharacterService, CharacterService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

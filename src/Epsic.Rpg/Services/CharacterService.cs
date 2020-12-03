@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Epsic.Rpg.Data;
 using Epsic.Rpg.Models;
 
 namespace Epsic.Rpg.Services
@@ -8,57 +9,61 @@ namespace Epsic.Rpg.Services
 
     public class CharacterService : ICharacterService
     {
-        private IList<Character> _characters = new List<Character>
+        private readonly EpsicRpgDataContext _context;
+        
+        public CharacterService(EpsicRpgDataContext context)
         {
-            new Character { Id = 1, Name = "Pierre"},
-            new Character { Id = 2, Name = "Paul"},
-            new Character { Id = 3, Name = "Jacques"},
-        };
+            _context = context;
+        }
 
         public IList<Character> GetAll()
         {
-            return _characters;
+            return _context.Characters.ToList();
         }
 
         public Character GetSingle(int id)
         {
-            return _characters.FirstOrDefault(c => c.Id == id);
+            return _context.Characters.FirstOrDefault(c => c.Id == id);
         }
 
         public Character Update(int id, CharacterPatchViewModel model)
         {
-            var character = _characters.FirstOrDefault(c => c.Id == id);
+            var character = _context.Characters.FirstOrDefault(c => c.Id == id);
 
             character.Name = model.Name;
             character.Class = model.Class;
+
+            _context.SaveChanges();
 
             return character;
         }
 
         public Character AddCharacter(Character newCharacter)
         {
-            _characters.Add(newCharacter);
+            _context.Characters.Add(newCharacter);
+            _context.SaveChanges();
             return newCharacter;
         }
 
         public IList<Character> Search(string name)
         {
-            return _characters.Where(c => c.Name.Contains(name)).ToList();
+            return _context.Characters.Where(c => c.Name.Contains(name)).ToList();
         }
 
         public void Delete(int id)
         {
-            _characters.Remove(_characters.FirstOrDefault(c => c.Id == id));
+            _context.Characters.Remove(_context.Characters.FirstOrDefault(c => c.Id == id));
+            _context.SaveChanges();
         }
 
         public bool ExistsById(int id)
         {
-            return _characters.Any(c => c.Id == id);
+            return _context.Characters.Any(c => c.Id == id);
         }
 
         public bool ExistsByName(string name)
         {
-            return _characters.Any(c => c.Name.Contains(name));
+            return _context.Characters.Any(c => c.Name.Contains(name));
         }
     }
 }
