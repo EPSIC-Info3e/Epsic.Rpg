@@ -1,4 +1,5 @@
 using Epsic.Rpg.Data;
+using Epsic.Rpg.Repositories;
 using Epsic.Rpg.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -30,6 +31,8 @@ namespace Epsic.Rpg
             services.AddSwaggerGen();
 
             services.AddTransient<ICharacterService, CharacterService>();
+            services.AddTransient<ITeamsService, TeamsService>();
+            services.AddTransient<ITeamsRepository, TeamsRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

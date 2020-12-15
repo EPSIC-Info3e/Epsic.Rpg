@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Epsic.Rpg.Models;
+﻿using Epsic.Rpg.Models;
 using Epsic.Rpg.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,7 +7,6 @@ namespace Epsic.Rpg.Controllers
     [ApiController]
     public class CharactersController : ControllerBase
     {
-
         public CharactersController(ICharacterService characterService)
         {
             _characterService = characterService;

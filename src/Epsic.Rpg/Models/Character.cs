@@ -11,6 +11,14 @@ namespace Epsic.Rpg.Models
         public int Defense { get; set; }
         public int Intelligence { get; set; }
         public RpgClass Class { get; set; }
+        public int? TeamId { get; set; }
+        public Team Team { get; set; }
+    }
+
+    public class CharacterSummaryViewModel
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 
     public class CharacterPatchViewModel

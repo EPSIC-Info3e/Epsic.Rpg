@@ -18,33 +18,6 @@ namespace Epsic.Rpg.Tests.Services
     [TestClass]
     public class CharacterServiceTests
     {
-        [TestMethod, TestCategory("Ex9")]
-        public async Task ImageTestAsync() 
-        {
-            //Arrange
-            var options = new DbContextOptionsBuilder<EpsicRpgDataContext>().UseSqlite(CreateInMemoryDatabase()).Options;
-            using (var context = new EpsicRpgDataContext(options))
-            {
-                await context.Database.EnsureCreatedAsync();
-            }
-
-            //Act 
-            using (var context = new EpsicRpgDataContext(options))
-            {
-                var personnage = new Character { Id = 9999 };
-                personnage.Avatar = Convert.ToBase64String(File.ReadAllBytes("avatar.png"));
-                context.Characters.Add(personnage);
-                context.SaveChanges();
-            }
-
-            //Assert
-            using (var context = new EpsicRpgDataContext(options))
-            {
-                var personnage2 = context.Characters.Find(9999);
-                Assert.AreEqual(Convert.ToBase64String(File.ReadAllBytes("avatar.png")), personnage2.Avatar);
-            }
-        }
-
         [TestMethod, TestCategory("Ex8")]
         public async Task TeamTestAsync() 
         {
@@ -118,7 +91,7 @@ namespace Epsic.Rpg.Tests.Services
 
         private static DbConnection CreateInMemoryDatabase()
         {
-            var connection = new SqliteConnection($"Filename={Guid.NewGuid()}.db");
+            var connection = new SqliteConnection($"Filename=:memory:");
 
             connection.Open();
             
