@@ -8,7 +8,7 @@ using Epsic.Rpg.Exceptions;
 
 namespace Epsic.Rpg.Tests.Services
 {
-    [TestClass, TestCategory("Ex10")]
+    [TestClass, TestCategory("Ex8")]
     public class TeamsServiceTests
     {
         [DataTestMethod]

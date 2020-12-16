@@ -1,7 +1,11 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Epsic.Rpg.Enums;
 using Epsic.Rpg.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Epsic.Rpg.Tests.Controllers
@@ -278,6 +282,41 @@ namespace Epsic.Rpg.Tests.Controllers
 
             // Assert
             Assert.AreEqual(Microsoft.AspNetCore.Http.StatusCodes.Status418ImATeapot, (int)response.StatusCode);
+        }
+
+        [TestMethod, TestCategory("Ex9")]
+        public async Task SetAvatarGoodImage()
+        {
+            //Arrange
+            var file = File.ReadAllBytes("avatar.png");
+
+            // Act
+            var response = await PostFileAsync($"/characters/{1}/avatar", file);
+
+            // Assert
+            Assert.AreEqual(Microsoft.AspNetCore.Http.StatusCodes.Status200OK, (int)response.StatusCode);
+
+            var responseGet = await (await GetAsync($"/characters/{1}/avatar")).Content.ReadAsByteArrayAsync();
+            
+            Assert.IsTrue(responseGet.SequenceEqual(file));
+        }
+
+        [TestMethod, TestCategory("Ex9")]
+        public async Task SetAvatarExpectedToFail()
+        {
+            //Arrange
+            var file = File.ReadAllBytes("avatar.png");
+            var file2 = File.ReadAllBytes("avatar2.png");
+
+            // Act
+            var response = await PostFileAsync($"/characters/{1}/avatar", file);
+
+            // Assert
+            Assert.AreEqual(Microsoft.AspNetCore.Http.StatusCodes.Status200OK, (int)response.StatusCode);
+
+            var responseGet = await (await GetAsync($"/characters/{1}/avatar")).Content.ReadAsByteArrayAsync();
+            
+            Assert.IsFalse(responseGet.SequenceEqual(file2));
         }
     }
 }

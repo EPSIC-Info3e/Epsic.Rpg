@@ -100,6 +100,13 @@ namespace Epsic.Rpg.Tests.Controllers
             return await _client.PostAsJsonAsync(url, body);
         }
 
+        protected async Task<HttpResponseMessage> PostFileAsync(string url, byte[] file) 
+        {
+            MultipartFormDataContent content = new MultipartFormDataContent();
+            content.Add(new ByteArrayContent(file), "file", "filename");
+            return await _client.PostAsync(url, content);
+        }
+
         protected async Task<T> PostAsync<T>(string url, T body) 
         {
             return await PostAsync<T, T>(url, body);
