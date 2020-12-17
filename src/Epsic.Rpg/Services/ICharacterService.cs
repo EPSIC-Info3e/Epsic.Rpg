@@ -13,5 +13,7 @@ namespace Epsic.Rpg.Services
         Character GetSingle(int id);
         IList<Character> Search(string name);
         Character Update(int id, CharacterPatchViewModel model);
+        void SetAvatar(int id, byte[] image);
+        byte[] GetAvatar(int id);
     }
 }

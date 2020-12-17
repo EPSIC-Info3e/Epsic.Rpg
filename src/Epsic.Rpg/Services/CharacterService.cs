@@ -56,6 +56,18 @@ namespace Epsic.Rpg.Services
             _context.SaveChanges();
         }
 
+        public void SetAvatar(int id, byte[] image)
+        {
+            var caracter = _context.Characters.Find(id);
+            caracter.Avatar = image;
+            _context.SaveChanges();
+        }
+
+        public byte[] GetAvatar(int id)
+        {
+            return _context.Characters.Find(id).Avatar;
+        }
+
         public bool ExistsById(int id)
         {
             return _context.Characters.Any(c => c.Id == id);

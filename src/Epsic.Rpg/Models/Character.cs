@@ -1,4 +1,5 @@
 using Epsic.Rpg.Enums;
+using Microsoft.AspNetCore.Http;
 
 namespace Epsic.Rpg.Models
 {
@@ -13,6 +14,7 @@ namespace Epsic.Rpg.Models
         public RpgClass Class { get; set; }
         public int? TeamId { get; set; }
         public Team Team { get; set; }
+        public byte[] Avatar { get; set; }
     }
 
     public class CharacterSummaryViewModel

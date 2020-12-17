@@ -1,5 +1,9 @@
-﻿using Epsic.Rpg.Models;
+﻿using System.IO;
+using System.Net;
+using System.Threading.Tasks;
+using Epsic.Rpg.Models;
 using Epsic.Rpg.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Epsic.Rpg.Controllers
@@ -71,6 +75,21 @@ namespace Epsic.Rpg.Controllers
             } catch {
                 return NoContent();
             }
+        }
+
+        [HttpPost("characters/{id}/avatar")]
+        public IActionResult Images([FromRoute] int id, IFormFile file)
+        {
+            var ms = new MemoryStream();
+            file.CopyTo(ms);
+            _characterService.SetAvatar(id, ms.ToArray());
+            return Ok();
+        }
+
+        [HttpGet("characters/{id}/avatar")]
+        public IActionResult Images([FromRoute] int id)
+        {
+            return File(_characterService.GetAvatar(id), "image/jpeg");
         }
     }
 }
