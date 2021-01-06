@@ -33,6 +33,8 @@ namespace Epsic.Rpg
             services.AddTransient<ICharacterService, CharacterService>();
             services.AddTransient<ITeamsService, TeamsService>();
             services.AddTransient<ITeamsRepository, TeamsRepository>();
+            services.AddTransient<IUsersService, UsersService>();
+            services.AddTransient<IUsersRepository, UsersRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
