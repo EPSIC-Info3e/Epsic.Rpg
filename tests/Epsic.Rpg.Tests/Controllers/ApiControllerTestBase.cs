@@ -126,4 +126,22 @@ namespace Epsic.Rpg.Tests.Controllers
             return response.EnsureSuccessStatusCode();
         } 
     }
+
+    public partial class RfcError
+    {
+        public Uri Type { get; set; }
+
+        public string Title { get; set; }
+
+        public long Status { get; set; }
+
+        public string TraceId { get; set; }
+
+        public Error Errors { get; set; }
+    }
+
+    public partial class Error
+    {
+        public string[] Name { get; set; }
+    }
 }
